@@ -10,13 +10,14 @@ def read_images(images=[]):
     '''
 
     for i, image in enumerate(images):
-        im = Image.open(image)
 
-        # TODO: test if this works with a non-PNG image
-        if image.format == "PNG":
-            im = im.convert("RGB")
+        if not isinstance(image, Image.Image):
+            im = Image.open(image)
+            images[i] = im
 
-        images[i] = im
+        # # TODO: test if this works with a non-PNG image
+        # if image.format == "PNG":
+        #     im = im.convert("RGB")
 
     return images
 
@@ -25,6 +26,7 @@ def img_resize(images=[]):
     '''
     Resizes images to 200x200.
     '''
+    # TODO: add parameter to let user choose the size of the images
 
     for i, image in enumerate(images):
         images[i] = image.resize((200, 200))
@@ -49,6 +51,7 @@ def create_gif(images=[]):
         gif : gif of the images
     '''
     # TODO: add paramerter 'duration' to change the speed of the gif
+    # TODO: add parameter to let user choose name of the gif
 
     # read in images with PIL
     images = read_images(images)
