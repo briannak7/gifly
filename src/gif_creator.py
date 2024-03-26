@@ -4,7 +4,7 @@ from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
-def read_images(images=[]):
+def read_images(images):
     '''
     Reads in images as pillow image object.
     '''
@@ -12,24 +12,20 @@ def read_images(images=[]):
     for i, image in enumerate(images):
 
         if not isinstance(image, Image.Image):
+            print('not')
             im = Image.open(image)
             images[i] = im
-
-        # # TODO: test if this works with a non-PNG image
-        # if image.format == "PNG":
-        #     im = im.convert("RGB")
 
     return images
 
 
-def img_resize(images=[]):
+def img_resize(images, size):
     '''
     Resizes images to 200x200.
     '''
-    # TODO: add parameter to let user choose the size of the images
 
     for i, image in enumerate(images):
-        images[i] = image.resize((200, 200))
+        images[i] = image.resize(size)
 
     return images
 
@@ -38,29 +34,30 @@ def img_to_png():
     pass
 
 
-def create_gif(images=[]):
+def create_gif(images, name, size=(200, 200), duration=300):
     '''
     Takes a list of images and returns a gif.
 
     Parameters:
     -----------
-        images: list of image file paths
+        images (list) : list of image file paths
+        name (string) : name of the gif to be created
+        size (tuple of ints): size of the images in the gif
+        duration (int) : duration of each frame in the gif
 
     Returns:
     --------
         gif : gif of the images
     '''
-    # TODO: add paramerter 'duration' to change the speed of the gif
-    # TODO: add parameter to let user choose name of the gif
 
     # read in images with PIL
     images = read_images(images)
 
     # resize images
-    images = img_resize(images)
+    images = img_resize(images, size)
 
-    gif = images[0].save('test.gif', save_all=True,
-                         append_images=images[1:], duration=300, loop=0)
+    gif = images[0].save(f'{name}.gif', save_all=True,
+                         append_images=images[1:], duration=duration, loop=0)
 
     return gif
 
@@ -69,7 +66,8 @@ if __name__ == "__main__":
 
     first = 'testing/images/first.png'
     second = 'testing/images/second.png'
+    img = 'testing/images/third.jpeg'
 
-    images = [first, second]
+    images = [first, second, img]
 
-    create_gif(images)
+    create_gif(images, 'test')
